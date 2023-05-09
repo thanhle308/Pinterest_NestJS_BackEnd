@@ -10,11 +10,12 @@ import { PrismaClient } from '@prisma/client';
 export class AuthService {
   prisma = new PrismaClient();
   constructor(private jwtService: JwtService, private config: ConfigService) {}
-  login(userLogin: userLogin) {
+  async login(userLogin: userLogin) {
     const token = this.jwtService.sign(
       { data: 'node 29' },
-      { secret: this.config.get('SECRET_KEY'), expiresIn: '5m' },
+      { secret: this.config.get('SECRET_KEY'), expiresIn: '30m' },
     );
+
     return token;
   }
   async signUp(user: nguoi_dung) {

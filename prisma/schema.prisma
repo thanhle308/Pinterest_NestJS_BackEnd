@@ -11,7 +11,7 @@ model binh_luan {
   binh_luan_id   Int        @id @default(autoincrement())
   nguoi_dung_id  Int
   hinh_id        Int
-  ngay_binh_luan DateTime   @db.Date
+  ngay_binh_luan String?    @db.VarChar(200)
   noi_dung       String?    @db.VarChar(200)
   nguoi_dung     nguoi_dung @relation(fields: [nguoi_dung_id], references: [nguoi_dung_id], onDelete: NoAction, onUpdate: NoAction, map: "binh_luan_ibfk_1")
   hinh_anh       hinh_anh   @relation(fields: [hinh_id], references: [hinh_id], onDelete: NoAction, onUpdate: NoAction, map: "binh_luan_ibfk_2")
