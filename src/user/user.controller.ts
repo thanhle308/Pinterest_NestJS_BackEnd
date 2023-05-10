@@ -6,38 +6,45 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
+  HttpException,
+  Headers,
+  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { hinh_anh, nguoi_dung } from '@prisma/client';
 
-@Controller('user')
+// @UseGuards(AuthGuard('jwt'))
+@Controller('/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  @Get('/profile')
+  getUser(@Request() req) {
+    return this.userService.getUser(req);
   }
 
-  @Get()
-  findAll() {
-    return 'hihi';
-    //this.userService.findAll();
+  @Get('/img-save')
+  imgSave(@Request() req) {
+    return this.userService.imgSave(req);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @Get('/img-posted')
+  imgPosted(@Request() req) {
+    return this.userService.imgPosted(req);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Delete('/remove/:id')
+  removeImage(@Param('id') id: number) {
+    return this.userService.removeImage(id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @Post('/post')
+  imgPost(@Request() req, @Body() body: hinh_anh) {
+    return this.userService.imgPost(req, body);
+  }
+
+  @Put('/update-profile')
+  updateProfile(@Request() req, @Body() body: nguoi_dung) {
+    return this.userService.updateProfile(req, body);
   }
 }

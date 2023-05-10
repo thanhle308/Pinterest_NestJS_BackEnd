@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 import { nguoi_dung } from '@prisma/client';
