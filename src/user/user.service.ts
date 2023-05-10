@@ -42,14 +42,24 @@ export class UserService {
     return data;
   }
 
-  async removeImage(id: number) {
-    await this.prisma.hinh_anh.delete({
+  async removeImage(id) {
+    // const removeSaved = await this.prisma.luu_anh.deleteMany({
+    //   where: {
+    //     hinh_id: Number(id),
+    //   },
+    // });
+    // const removeCmt = await this.prisma.binh_luan.deleteMany({
+    //   where: {
+    //     hinh_id: Number(id),
+    //   },
+    // });
+    const removeImg = await this.prisma.hinh_anh.delete({
       where: {
         hinh_id: Number(id),
       },
     });
-
-    return id;
+    // await this.prisma.$transaction([removeSaved, removeCmt, removeImg]);
+    return 'delete done';
   }
 
   async imgPost(req, img: hinh_anh) {

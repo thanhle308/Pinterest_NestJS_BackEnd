@@ -34,7 +34,7 @@ export class UserController {
   }
 
   @Delete('/remove/:id')
-  removeImage(@Param('id') id: number) {
+  removeImage(@Param('id') id) {
     return this.userService.removeImage(id);
   }
 
