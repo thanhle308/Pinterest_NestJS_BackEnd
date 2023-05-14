@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaClient, hinh_anh, nguoi_dung } from '@prisma/client';
+import { PrismaClient, binh_luan, hinh_anh, nguoi_dung } from '@prisma/client';
 import { data_decode } from './dto/user.dto';
 @Injectable()
 export class UserService {
@@ -8,7 +8,7 @@ export class UserService {
   constructor(private jwtService: JwtService) {}
 
   async decode(code) {
-    const token = code.headers.authorization;
+    const token = code.headers.token;
     const data_decode: any = await this.jwtService.decode(token);
     return data_decode.payload.nguoi_dung_id;
   }
@@ -43,22 +43,22 @@ export class UserService {
   }
 
   async removeImage(id) {
-    // const removeSaved = await this.prisma.luu_anh.deleteMany({
-    //   where: {
-    //     hinh_id: Number(id),
-    //   },
-    // });
-    // const removeCmt = await this.prisma.binh_luan.deleteMany({
-    //   where: {
-    //     hinh_id: Number(id),
-    //   },
-    // });
-    const removeImg = await this.prisma.hinh_anh.delete({
+    const removeSaved = this.prisma.luu_anh.deleteMany({
       where: {
         hinh_id: Number(id),
       },
     });
-    // await this.prisma.$transaction([removeSaved, removeCmt, removeImg]);
+    const removeCmt = this.prisma.binh_luan.deleteMany({
+      where: {
+        hinh_id: Number(id),
+      },
+    });
+    const removeImg = this.prisma.hinh_anh.delete({
+      where: {
+        hinh_id: Number(id),
+      },
+    });
+    await this.prisma.$transaction([removeSaved, removeCmt, removeImg]);
     return 'delete done';
   }
 
@@ -69,6 +69,12 @@ export class UserService {
       data: img,
     });
     return data;
+  }
+
+  async upLoadImage(req, img, file: any) {
+    const nguoi_dung_id = await this.decode(req);
+
+    return img;
   }
 
   async updateProfile(req, user: nguoi_dung) {
@@ -82,5 +88,13 @@ export class UserService {
       },
     });
     return { Status: 'Update Done', user };
+  }
+  async saveComment(req, comment: binh_luan) {
+    const nguoi_dung_id = await this.decode(req);
+    comment.nguoi_dung_id = nguoi_dung_id;
+    const newComment = await this.prisma.binh_luan.create({
+      data: comment,
+    });
+    return comment;
   }
 }

@@ -46,11 +46,4 @@ export class ImagesService {
     });
     return data;
   }
-
-  async saveComment(comment: binh_luan) {
-    const newComment = await this.prisma.binh_luan.create({
-      data: comment,
-    });
-    return newComment;
-  }
 }

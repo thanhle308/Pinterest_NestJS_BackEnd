@@ -14,7 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { searchImg } from './dto/img.dto';
 import { binh_luan } from '@prisma/client';
 
-// @UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'))
 @Controller('/images')
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
@@ -37,9 +37,5 @@ export class ImagesController {
   @Get('/info-save/:id')
   infoSave(@Param('id') id: number) {
     return this.imagesService.infoSave(id);
-  }
-  @Post('/comment')
-  saveComment(@Body() body: binh_luan) {
-    return this.imagesService.saveComment(body);
   }
 }
